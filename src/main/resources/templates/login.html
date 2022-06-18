@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <script src="http://libs.baidu.com/jquery/1.10.2/jquery.min.js"></script>
+</head>
+<body>
+<!--<form th:action="@{/login}" method="post">-->
+账号：<input type="text" id="username">
+密码：<input type="text" id="password">
+
+<!--    <input type="submit" value="测试" th:action="@{/all}">-->
+<!--    <p th:if="${error != null}" th:text="${error}"></p>-->
+
+<!--    用户名：<input type="text" placeholder="用户名” name="form-username" />-->
+<!--    密码:<input type="password" placeholder="密码" id="form-password" />-->
+<button id="login" class="btn">登录</button>
+<button onclick="reg()" class="btn">注册</button>
+
+<!--</form>-->
+
+<script type="text/javascript">
+
+    $(function () {
+        $("#login").click(function () {
+            alert("asv")
+            jump();
+            alert("a")
+        });
+    });
+
+    //  注册
+    function reg() {
+        var username = document.getElementById("form-username").value;   //获取到前端输入的用户名
+        var password = document.getElementById("form-password").value;	//获取到前端输入的密码
+        var obj = {
+            username: username,
+            password: password,
+        }
+
+        $.ajax({
+            url: "http://localhost:8089/reg",    //reg是注册接口
+            type: 'POST',
+            dataType: 'json',
+            contentType: 'application/json',
+            data: JSON.stringify(obj),
+            success: function (result) {
+                if (result == 1) {
+                    alert("注册成功");
+                } else if (result == 2) {
+                    alert("密码不能为空");
+                } else if (result == 3) {
+                    alert("账号不能为空");
+                } else {
+                    alert("用户名已被注册");
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                console.log('XMLHttpRequest:');
+                console.log(XMLHttpRequest);
+                alert('网络异常！尝试刷新网页解决问题')
+            }
+
+        });
+    }
+
+
+    //登录
+    function jump() {
+        var username = document.getElementById("username").value;
+        var password = document.getElementById("password").value;
+        var obj = {
+            username: username,
+            password: password,
+        }
+        alert('fuck');
+        alert(JSON.stringify(obj));
+        $.ajax({
+            url: "http://localhost:8089/login",        //login是登录接口
+            type: 'POST',
+            dataType: 'json',
+            contentType: 'application/json;charset=utf-8',
+            data: JSON.stringify(obj),
+            // data: obj,
+            success: function (result) {
+                if (result.code === 0) {
+                    alert("登录成功");
+                } else {
+                    alert("账号或密码不正确");
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                console.log('XMLHttpRequest:');
+                console.log(XMLHttpRequest);
+                alert('网络异常！尝试刷新网页解决问题')
+            }
+        });
+    }
+
+
+</script>
+</body>
+</html>
+
