@@ -37,6 +37,20 @@ public class Student implements Serializable {
 
     private String remark;
 
+    public Student() {
+    }
+
+    public Student(Integer id, Integer clazzId, String sn, String username, String password, String sex, String photo, String remark) {
+        this.id = id;
+        this.clazzId = clazzId;
+        this.sn = sn;
+        this.username = username;
+        this.password = password;
+        this.sex = sex;
+        this.photo = photo;
+        this.remark = remark;
+    }
+
     public Integer getId() {
         return id;
     }

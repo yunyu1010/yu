@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>新增人员</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 引入 Bootstrap -->
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+
+    <div class="row clearfix">
+        <div class="col-md-12 column">
+            <div class="page-header">
+                <h1>
+                    <small>新增人员</small>
+                </h1>
+            </div>
+        </div>
+    </div>
+    <form th:action="@{addBook}" method="post">
+        学生班级：<input type="text" name="clazzId"}/><br/>
+        学生学号：<input type="text" name="sn"/><br/>
+        学生姓名：<input type="text" name="username"}/><br/>
+        学生密码：<input type="text" name="password"}/><br/>
+        学生性别：<input type="text" name="sex"}/><br/>
+        学生图片：<input type="text" name="photo"}/><br/>
+        学生详情：<input type="text" name="remark"}/><br/>
+        <input type="submit" value="添加">
+    </form>
+
+</div>
+
+</body>
+</html>

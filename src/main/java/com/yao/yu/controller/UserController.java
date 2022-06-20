@@ -3,18 +3,14 @@ package com.yao.yu.controller;
 
 import com.yao.yu.entity.User;
 import com.yao.yu.service.IUserService;
-import com.alibaba.fastjson.JSONObject;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.HashMap;
+
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -38,8 +34,8 @@ public class UserController {
      *
      * @return
      */
-    @RequestMapping(value = "/reg", method = RequestMethod.GET, headers = "Accept=application/json")
-    public Runnable reg(@RequestBody User userEntity) {
+    @RequestMapping(value = "/reg", method = RequestMethod.POST, headers = "Accept=application/json")
+    public Result reg(@RequestBody User userEntity) {
 
 //        int result = 1;
         Result result = new Result(-1,"error");
@@ -53,13 +49,16 @@ public class UserController {
             }
         }
         if ("".equals(userEntity.getPassword())) {
-            result.setCode(); = 2;    //密码不能为空
+            result.setCode(2);    //密码不能为空
         } else if ("".equals(userEntity.getUsername())) {
-            result = 3;    //账号不能为空
-        }
-        if (result == 1) {
+            result.setCode(3);    //账号不能为空
+        }else {
+            result.setCode(1);
             userService.register(userEntity);
         }
+//        if (result.equals(1)) {
+//            userService.register(userEntity);
+//        }
         return result;
     }
 
@@ -77,16 +76,18 @@ public class UserController {
         User u = userService.login(userEntity);
 
         if ("".equals(userEntity.getUsername()) || "".equals(userEntity.getPassword())) {
-            result.setMsg("用户名或者密码错误"); //返回值为0前端提示用户名或者密码错误
+            //返回值为0前端提示用户名或者密码错误
+            result.setMsg("用户名或者密码错误");
         } else if (u == null) {
-            result.setMsg("用户名或者密码错误"); //用户名不存在
-        } else if (userEntity.getPassword().equals(u.getPassword())) {   //数据库中查询到的密码跟前端获取到的对比
+            //用户名不存在
+            result.setMsg("用户名或者密码错误");
+            //数据库中查询到的密码跟前端获取到的对比
+        } else if (userEntity.getPassword().equals(u.getPassword())) {
             result.setCode(0);
             result.setMsg("login success");
         } else {
 //            result = 0;
         }
-
         return result;
 
     }
@@ -98,16 +99,16 @@ public class UserController {
         private String msg;
     }
 
-//
-//    @GetMapping("/")
-//    public String index() {
-//        return "/index";
-//    }
-//
+
+    @GetMapping("/")
+    public String index() {
+        return "/index";
+    }
+
 
     @RequestMapping(value = "/tologin", method = RequestMethod.GET)
     public String tologin() {
-        return "/login";
+        return "/backstage/login";
     }
 //
 //    public String login(@RequestParam("username")String username,

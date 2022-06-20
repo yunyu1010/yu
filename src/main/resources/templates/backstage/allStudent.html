@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:c="">
+<head>
+    <meta charset="UTF-8">
+    <title>学生信息表</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 引入 Bootstrap -->
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <!-- 引入jQuery -->
+    <!--    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>-->
+
+    <link href="../../static/layui/css/layui.css" type="text/css">
+
+<!--    <style>-->
+<!--        .row{-->
+<!--            margin-right: 0px;-->
+<!--        }-->
+
+<!--        .tableCenter{-->
+<!--            text-align: center;-->
+<!--        }-->
+
+<!--    </style>-->
+</head>
+<body>
+<!--<div class="container">-->
+<!--    <div class="row clearfix">-->
+<!--        <div class="col-md-12 column">-->
+<!--            <div class="page-header">-->
+<!--                <h1>-->
+<!--                    <small>列表 —— 显示信息</small>-->
+<!--                </h1>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--<div class="row">-->
+<!--    <div class="col-md-4 column">-->
+<!--        <a class="btn btn-primary" th:href="@{/addBook}">新增</a>-->
+<!--        <p class="btn btn-primary">搜索框：</p><input value="搜索">-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--<div class="row clearfix">-->
+<!--    <div class="col-md-12 column">-->
+<!--        <table class="table table-hover table-striped">-->
+<!--            <thead>-->
+<!--            <tr>-->
+<!--                <th>学生编号</th>-->
+<!--                <th>学生班级</th>-->
+<!--                <th>学生学号</th>-->
+<!--                <th>学生姓名</th>-->
+<!--                <th>学生性别</th>-->
+<!--                <th>学生详情</th>-->
+<!--                <th>操作</th>-->
+<!--            </tr>-->
+<!--            </thead>-->
+
+<!--            <tbody>-->
+<!--            <tr th:each="item : ${list} ">-->
+<!--                <td th:text="${item.getId()}"/>-->
+<!--                <td th:text="${item.getClazzId()}"/>-->
+<!--                <td th:text="${item.getSn()}"/>-->
+<!--                <td th:text="${item.getUsername()}"/>-->
+<!--                <td th:text="${item.getSex()}"/>-->
+<!--                <td th:text="${item.getRemark()}"/>-->
+
+<!--                <td>-->
+<!--                    <a th:href="@{'/toUpdateBook/' + ${item.getId()}}">修改</a>-->
+<!--                    <a th:href="@{'/toDelete/' + ${item.getId()}}">删除</a>-->
+<!--                </td>-->
+<!--            </tr>-->
+<!--            </tbody>-->
+<!--        </table>-->
+<!--    </div>-->
+<!--</div>-->
+
+<div class="layui-fluid" style="margin-top: 40px;">
+    <fieldset class="layui-elem-field layui-field-title">
+        <legend style="font-size: 26px">所有注册用户</legend>
+    </fieldset>
+    <table id="allStudent" lay-filter="user"></table>
+</div>
+
+<script src="../../static/layui/layui.js"></script>
+<script>
+    layui.use(['element','table'],function () {
+        var element = layui.element,
+            $ = layui.jquery,
+            table = layui.table;
+
+        var dt = table.render({
+            elem:"#allStudent",
+            // url:"/allStudent",
+            url : "http://localhost:8090/allStudent",
+            page:true,
+            cols:[[
+                {field: 'id', title: 'id', align: 'center'},
+                {field: 'clazzId', title: '班级', align: 'center'},
+                {field: 'sn', title: '学号', align: 'center'},
+                {field: 'username', title: '用户名', align: 'center'},
+                {field: 'password', title: '密码', align: 'center'},
+                {field: 'sex', title: '性别', align: 'center'},
+                {field: 'remark', title: '描述', align: 'center'},
+                {title: '操作', align: 'center',toolbar:"#tools"}
+            ]]
+        });
+
+        table.on('tool(user)',function(obj){
+            var data = obj.data;
+            var layEvent = obj.event;
+            var tr = obj.tr;
+            var currPage = dt.config.page.curr;
+
+            if(layEvent ==="edit"){
+                window.location.href="toEditUserPage?uID="+data.uID;
+            }
+            if(layEvent === 'delete'){
+                layer.confirm('确认删除当前数据吗？',{icon:5,shade:0.1},function(index){
+                    $.post("deleteUser",{uID:data.uID},function(success){
+                        if(success == "OK"){
+                            obj.del();
+                            dt.reload({
+                                page:{curr:1}
+                            });
+                            layer.msg("删除成功");
+                        }
+                    })
+                });
+            }
+        });
+    });
+</script>
+<script type="text/html" id="tools">
+    <a class="layui-btn layui-btn-sm" lay-event="edit">修改</a>
+    <a class="layui-btn layui-btn-sm layui-btn-danger" lay-event="delete">删除</a>
+</script>
+
+</body>
+</html>
